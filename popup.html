@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  :root { color-scheme: dark; }
+  body { width: 300px; margin: 0; padding: 16px; font-family: "Roboto", Arial, sans-serif; background: #0f0f0f; color: #f1f1f1; }
+  h1 { font-size: 15px; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+  h1 span.dot { color: #ff0000; }
+  .section { background: #1c1c1c; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .row label.title { font-size: 13px; font-weight: 600; }
+  .val { font-size: 12px; color: #aaa; min-width: 56px; text-align: right; }
+  input[type="range"] { width: 100%; accent-color: #ff0000; margin: 4px 0 2px; }
+  input[type="range"]:disabled { opacity: .35; }
+  .hint { font-size: 11px; color: #888; margin-top: 2px; }
+  .switch { position: relative; width: 38px; height: 20px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; inset: 0; cursor: pointer; background: #555; border-radius: 20px; transition: .2s; }
+  .slider::before { content: ""; position: absolute; height: 14px; width: 14px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+  input:checked + .slider { background: #ff0000; }
+  input:checked + .slider::before { transform: translateX(18px); }
+  .segmented { display: flex; gap: 6px; margin-top: 4px; }
+  .segmented button { flex: 1; padding: 7px 0; border: 1px solid #3a3a3a; background: #272727; color: #ddd; font-size: 12px; border-radius: 7px; cursor: pointer; }
+  .segmented button:hover { background: #333; }
+  .segmented button.active { background: #ff0000; border-color: #ff0000; color: #fff; font-weight: 700; }
+  button#reset { width: 100%; padding: 9px; border: none; border-radius: 8px; background: #272727; color: #f1f1f1; font-size: 13px; cursor: pointer; }
+  button#reset:hover { background: #333; }
+</style>
+</head>
+<body>
+  <h1><span class="dot">&#9654;</span> Thumbnail Resizer</h1>
+
+  <div class="section">
+    <div class="row">
+      <label class="title">Home / Subscriptions</label>
+      <label class="switch"><input type="checkbox" id="homeEnabled"><span class="slider"></span></label>
+    </div>
+    <input type="range" id="homeCols" min="3" max="9" step="1">
+    <div class="row" style="margin:0">
+      <span class="hint">Columns (more columns = smaller)</span>
+      <span class="val"><span id="homeColsVal"></span> col</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="row">
+      <label class="title">Suggestions (while watching)</label>
+      <label class="switch"><input type="checkbox" id="sideEnabled"><span class="slider"></span></label>
+    </div>
+    <input type="range" id="sideWidth" min="80" max="246" step="2">
+    <div class="row" style="margin:0">
+      <span class="hint">Thumbnail width</span>
+      <span class="val"><span id="sideWidthVal"></span> px</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="row" style="margin-bottom:6px">
+      <label class="title">Search results</label>
+    </div>
+    <div class="segmented" id="searchSeg">
+      <button data-preset="off">Off</button>
+      <button data-preset="small">Small</button>
+      <button data-preset="medium">Medium</button>
+      <button data-preset="large">Large</button>
+    </div>
+  </div>
+
+  <button id="reset">Reset to defaults</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
