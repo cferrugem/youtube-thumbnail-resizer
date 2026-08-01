@@ -13,8 +13,13 @@ const sliders = [
   { en: "sideEnabled", sl: "sideWidth", out: "sideWidthVal" }
 ];
 
-// sub-toggles do modo foco, desligados junto com o master
+// sub-toggles do modo foco, que seguem o master na UI
 const focusSubs = ["focusOnTabSwitch", "focusOnComments"];
+
+// Preferencia real de cada sub-toggle. Com o master desligado a UI mostra os
+// dois apagados (senao parecem ativos sem estar), mas o valor escolhido fica
+// guardado aqui e no storage - religar o master devolve a selecao de antes.
+const focusPrefs = {};
 
 let saveTimer = null;
 function saveDebounced(obj) {
@@ -26,11 +31,15 @@ function refreshDisabled() {
   sliders.forEach(r => {
     document.getElementById(r.sl).disabled = !document.getElementById(r.en).checked;
   });
-  const focusOn = document.getElementById("focusEnabled").checked;
+}
+
+function paintFocus() {
+  const on = document.getElementById("focusEnabled").checked;
   focusSubs.forEach(id => {
     const box = document.getElementById(id);
-    box.disabled = !focusOn;
-    box.closest(".row").classList.toggle("off", !focusOn);
+    box.checked = on && focusPrefs[id];
+    box.disabled = !on;
+    box.closest(".row").classList.toggle("off", !on);
   });
 }
 
@@ -48,7 +57,8 @@ function render(s) {
   });
   markSearch(s.searchPreset);
   document.getElementById("focusEnabled").checked = s.focusEnabled;
-  focusSubs.forEach(id => { document.getElementById(id).checked = s[id]; });
+  focusSubs.forEach(id => { focusPrefs[id] = s[id]; });
+  paintFocus();
   refreshDisabled();
 }
 
@@ -72,11 +82,16 @@ sliders.forEach(r => {
   document.getElementById(r.sl).addEventListener("input", collectSliders);
 });
 
-// focus mode toggles
-["focusEnabled"].concat(focusSubs).forEach(id => {
-  document.getElementById(id).addEventListener("change", () => {
-    refreshDisabled();
-    chrome.storage.local.set({ [id]: document.getElementById(id).checked });
+// focus mode: master repinta os sub-toggles, que so guardam a propria escolha
+document.getElementById("focusEnabled").addEventListener("change", (e) => {
+  paintFocus();
+  chrome.storage.local.set({ focusEnabled: e.target.checked });
+});
+
+focusSubs.forEach(id => {
+  document.getElementById(id).addEventListener("change", (e) => {
+    focusPrefs[id] = e.target.checked;
+    chrome.storage.local.set({ [id]: e.target.checked });
   });
 });
 
