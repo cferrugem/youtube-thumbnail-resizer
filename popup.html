@@ -14,6 +14,10 @@
   input[type="range"] { width: 100%; accent-color: #ff0000; margin: 4px 0 2px; }
   input[type="range"]:disabled { opacity: .35; }
   .hint { font-size: 11px; color: #888; margin-top: 2px; }
+  .row.sub { padding-left: 10px; border-left: 2px solid #2f2f2f; }
+  .row.sub label.sublabel { font-size: 12px; color: #ccc; }
+  .row.sub.off label.sublabel { opacity: .35; }
+  .row.sub.off .slider { cursor: default; }
   .switch { position: relative; width: 38px; height: 20px; }
   .switch input { opacity: 0; width: 0; height: 0; }
   .slider { position: absolute; inset: 0; cursor: pointer; background: #555; border-radius: 20px; transition: .2s; }
@@ -64,6 +68,22 @@
       <button data-preset="small">Small</button>
       <button data-preset="medium">Medium</button>
       <button data-preset="large">Large</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="row">
+      <label class="title">Focus mode</label>
+      <label class="switch"><input type="checkbox" id="focusEnabled"><span class="slider"></span></label>
+    </div>
+    <div class="hint" style="margin-bottom:10px">Pauses the video when your attention leaves it.</div>
+    <div class="row sub">
+      <label class="sublabel" for="focusOnBlur">Leaving the tab or window</label>
+      <label class="switch"><input type="checkbox" id="focusOnBlur"><span class="slider"></span></label>
+    </div>
+    <div class="row sub" style="margin:0">
+      <label class="sublabel" for="focusOnComments">Reaching the comments</label>
+      <label class="switch"><input type="checkbox" id="focusOnComments"><span class="slider"></span></label>
     </div>
   </div>
 

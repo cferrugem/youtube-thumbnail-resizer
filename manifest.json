@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
   "name": "YouTube Thumbnail Resizer",
-  "version": "1.0",
-  "description": "Customize the size of YouTube thumbnails: home, search results, and watch-page suggestions.",
+  "version": "1.1",
+  "description": "Customize the size of YouTube thumbnails, plus a focus mode that pauses the video when your attention leaves it.",
   "permissions": ["storage"],
   "host_permissions": ["https://www.youtube.com/*"],
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
-      "js": ["content.js"],
+      "js": ["content.js", "focus.js"],
       "run_at": "document_start"
     }
   ],

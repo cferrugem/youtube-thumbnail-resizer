@@ -1,13 +1,20 @@
 const DEFAULTS = {
   homeEnabled: true,  homeCols: 5,
   sideEnabled: true,  sideWidth: 140,
-  searchPreset: "medium"   // off | small | medium | large
+  searchPreset: "medium",  // off | small | medium | large
+
+  focusEnabled: true,      // pausa o video quando sua atencao sai dele
+  focusOnBlur: true,       // trocar de aba / minimizar / Alt+Tab
+  focusOnComments: true    // rolar ate os comentarios
 };
 
 const sliders = [
   { en: "homeEnabled", sl: "homeCols",  out: "homeColsVal" },
   { en: "sideEnabled", sl: "sideWidth", out: "sideWidthVal" }
 ];
+
+// sub-toggles do modo foco, desligados junto com o master
+const focusSubs = ["focusOnBlur", "focusOnComments"];
 
 let saveTimer = null;
 function saveDebounced(obj) {
@@ -18,6 +25,12 @@ function saveDebounced(obj) {
 function refreshDisabled() {
   sliders.forEach(r => {
     document.getElementById(r.sl).disabled = !document.getElementById(r.en).checked;
+  });
+  const focusOn = document.getElementById("focusEnabled").checked;
+  focusSubs.forEach(id => {
+    const box = document.getElementById(id);
+    box.disabled = !focusOn;
+    box.closest(".row").classList.toggle("off", !focusOn);
   });
 }
 
@@ -34,6 +47,8 @@ function render(s) {
     document.getElementById(r.out).textContent = s[r.sl];
   });
   markSearch(s.searchPreset);
+  document.getElementById("focusEnabled").checked = s.focusEnabled;
+  focusSubs.forEach(id => { document.getElementById(id).checked = s[id]; });
   refreshDisabled();
 }
 
@@ -55,6 +70,14 @@ chrome.storage.local.get(DEFAULTS, render);
 sliders.forEach(r => {
   document.getElementById(r.en).addEventListener("change", collectSliders);
   document.getElementById(r.sl).addEventListener("input", collectSliders);
+});
+
+// focus mode toggles
+["focusEnabled"].concat(focusSubs).forEach(id => {
+  document.getElementById(id).addEventListener("change", () => {
+    refreshDisabled();
+    chrome.storage.local.set({ [id]: document.getElementById(id).checked });
+  });
 });
 
 // search preset buttons
