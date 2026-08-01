@@ -101,9 +101,13 @@ the `storage.onChanged` listener the extension already has.
 
 | Key | Default | Meaning |
 | --- | --- | --- |
-| `focusEnabled` | `true` | master switch for the whole module |
+| `focusEnabled` | `false` | master switch for the whole module |
 | `focusOnBlur` | `true` | pause on tab switch / minimize / window blur |
 | `focusOnComments` | `true` | pause when comments scroll into view |
+
+Focus mode is **opt-in**: it changes how the player behaves, so it ships off and the user
+turns it on from the popup. The two per-trigger toggles default to on, so enabling the
+master switch gives the complete behaviour without further setup.
 
 Turning a trigger off clears its reason immediately, which may resume the video if that
 was the last one active.

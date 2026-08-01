@@ -3,7 +3,7 @@ const DEFAULTS = {
   sideEnabled: true,  sideWidth: 140,
   searchPreset: "medium",  // off | small | medium | large
 
-  focusEnabled: true,      // pausa o video quando sua atencao sai dele
+  focusEnabled: false,     // opt-in: pausa o video quando sua atencao sai dele
   focusOnBlur: true,       // trocar de aba / minimizar / Alt+Tab
   focusOnComments: true    // rolar ate os comentarios
 };

@@ -12,7 +12,7 @@ A lightweight Chrome (Manifest V3) extension that lets you customize the size of
 
 ### Focus mode
 
-Pauses the watch-page video the moment your attention goes elsewhere, and resumes it when you come back:
+**Off by default** — flip the *Focus mode* switch in the popup to turn it on. Once on, it pauses the watch-page video the moment your attention goes elsewhere, and resumes it when you come back:
 
 - **Leaving the tab or window** — switching tabs, minimizing, or Alt+Tabbing to another app.
 - **Reaching the comments** — the video pauses once the comments section scrolls onto the screen, and resumes when you scroll back up.
@@ -48,7 +48,7 @@ Each trigger has its own toggle, so you can keep one and drop the other.
 
 ## Manual test checklist
 
-There is no automated test suite; this is a small DOM module driven entirely by browser events. After loading the unpacked extension, verify on a watch page:
+There is no automated test suite; this is a small DOM module driven entirely by browser events. After loading the unpacked extension, **turn *Focus mode* on in the popup** (it is off by default), then verify on a watch page:
 
 1. Play a video, switch tabs → pauses. Return → resumes.
 2. Play a video, Alt+Tab to another app → pauses. Return → resumes.
@@ -56,7 +56,7 @@ There is no automated test suite; this is a small DOM module driven entirely by 
 4. Scroll to the comments (pauses), Alt+Tab away and back → **stays paused**.
 5. Pause manually, switch tabs and back → **stays paused**.
 6. Hover a home-page thumbnail preview, switch tabs → the preview is unaffected.
-7. Turn the *Focus mode* master toggle off → none of the above pause.
+7. Turn the *Focus mode* master toggle back off → none of the above pause, and a video paused by it resumes.
 
 ## Files
 

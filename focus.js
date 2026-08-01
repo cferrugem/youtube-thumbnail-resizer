@@ -4,7 +4,7 @@
 // Retoma quando (e so quando) todos os motivos sumiram.
 
 const FOCUS_DEFAULTS = {
-  focusEnabled: true,
+  focusEnabled: false,    // opt-in: muda o comportamento do player, entao vem desligado
   focusOnBlur: true,      // trocar de aba / minimizar / janela perde o foco
   focusOnComments: true   // comentarios entram no viewport
 };
