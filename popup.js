@@ -4,7 +4,7 @@ const DEFAULTS = {
   searchPreset: "medium",  // off | small | medium | large
 
   focusEnabled: false,     // opt-in: pausa o video quando sua atencao sai dele
-  focusOnBlur: true,       // trocar de aba / minimizar / Alt+Tab
+  focusOnTabSwitch: true,  // trocar de aba / minimizar
   focusOnComments: true    // rolar ate os comentarios
 };
 
@@ -14,7 +14,7 @@ const sliders = [
 ];
 
 // sub-toggles do modo foco, desligados junto com o master
-const focusSubs = ["focusOnBlur", "focusOnComments"];
+const focusSubs = ["focusOnTabSwitch", "focusOnComments"];
 
 let saveTimer = null;
 function saveDebounced(obj) {

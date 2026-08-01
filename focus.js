@@ -1,17 +1,24 @@
 // === YouTube Thumbnail Resizer - focus mode ===
 // Pausa o video da watch page quando sua atencao sai dele: trocar de aba,
-// minimizar, Alt+Tab pra outro app, ou rolar ate os comentarios.
+// minimizar, ou rolar ate os comentarios.
 // Retoma quando (e so quando) todos os motivos sumiram.
+//
+// Deliberadamente NAO usamos o evento "blur" da window pra detectar Alt+Tab.
+// Ele dispara identico pra sair pra outro app, clicar no flyout de volume, na
+// barra de tarefas, numa notificacao do Windows, ou em outro monitor - e a
+// pagina nao tem como saber qual foi. Num setup de dois monitores isso pausa o
+// video toda vez que voce olha pra outra tela. "visibilitychange" nao tem essa
+// ambiguidade: so muda em troca de aba e ao minimizar.
 
 const FOCUS_DEFAULTS = {
-  focusEnabled: false,    // opt-in: muda o comportamento do player, entao vem desligado
-  focusOnBlur: true,      // trocar de aba / minimizar / janela perde o foco
-  focusOnComments: true   // comentarios entram no viewport
+  focusEnabled: false,      // opt-in: muda o comportamento do player, entao vem desligado
+  focusOnTabSwitch: true,   // trocar de aba / minimizar
+  focusOnComments: true     // comentarios entram no viewport
 };
 
 let cfg = Object.assign({}, FOCUS_DEFAULTS);
 
-// motivos ativos pra estar pausado: "hidden" | "blur" | "comments"
+// motivos ativos pra estar pausado: "hidden" | "comments"
 const reasons = new Set();
 
 let pausedByUs = false;   // a pausa atual foi nossa?
@@ -98,26 +105,15 @@ function bindVideo() {
   }
 }
 
-// ---------------------------------------------------------------- gatilho: aba / janela
+// ---------------------------------------------------------------- gatilho: troca de aba
 
 function onVisibilityChange() {
-  if (!cfg.focusOnBlur) return;
+  if (!cfg.focusOnTabSwitch) return;
   if (document.hidden) addReason("hidden");
   else removeReason("hidden");
 }
 
-function onWindowBlur() {
-  if (!cfg.focusOnBlur) return;
-  addReason("blur");
-}
-
-function onWindowFocus() {
-  removeReason("blur");
-}
-
 document.addEventListener("visibilitychange", onVisibilityChange);
-window.addEventListener("blur", onWindowBlur);
-window.addEventListener("focus", onWindowFocus);
 
 // ---------------------------------------------------------------- gatilho: comentarios
 
@@ -178,10 +174,7 @@ function applyConfig(next) {
     detachCommentsObserver();
     return;
   }
-  if (!cfg.focusOnBlur) {
-    removeReason("hidden");
-    removeReason("blur");
-  }
+  if (!cfg.focusOnTabSwitch) removeReason("hidden");
   if (!cfg.focusOnComments) removeReason("comments");
   // Religar um gatilho deve valer na hora. O IntersectionObserver so chama de
   // volta quando a intersecao muda, entao reanexamos pra forcar a avaliacao
